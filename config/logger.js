@@ -19,6 +19,8 @@ const logger = createLogger(
             })
         ]
     }
-)
 
+    
+)
+console.log("MONGODB_URL:", process.env.MONGODB_URL);
 module.exports=logger;
