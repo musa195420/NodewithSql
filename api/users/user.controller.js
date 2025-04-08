@@ -1,4 +1,4 @@
-const { create,getUserByUserId,getUsers,updateUser,deleteUser,getUserByUserEmail } = require("./user.service");
+const { create,getUserByUserId,getUsers,updateUser,deleteUser,getUserByUserEmail, createImgUser } = require("./user.service");
 const { generateAccessToken, generateRefreshToken } = require("../auth/refresh_token");
 const { genSaltSync, hashSync,compareSync } = require("bcrypt");
 const {sign}=require("jsonwebtoken");
@@ -7,16 +7,48 @@ require ("dotenv").config();
 module.exports = {
     createUser: (req, res) => {
         const body = req.body;
+      
+
         const salt = genSaltSync(10);
         body.password = hashSync(body.password, salt);
+
         create(body, (err, results) => {
             if (err) {
                 console.log(err);
                 return res.status(500).json({
                     success: 0,
-                    message: "Database Connection Error "+err,
-                });  // return here to prevent further code execution
+                    message: "Database Connection Error " + err,
+                });
             }
+
+            return res.status(200).json({
+                success: 1,
+                data: results,
+            });
+        });
+    },
+    createUserImage: (req, res) => {
+        const body = req.body;
+        const file = req.file;
+
+        if (!file) {
+            return res.status(400).json({ success: 0, message: "Image is required." });
+        }
+
+        body.image = file.filename; // Save filename or full path as needed
+
+        const salt = genSaltSync(10);
+        body.password = hashSync(body.password, salt);
+
+        createImgUser(body, (err, results) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error " + err,
+                });
+            }
+
             return res.status(200).json({
                 success: 1,
                 data: results,

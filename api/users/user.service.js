@@ -3,15 +3,37 @@ const pool = require("../../config/database");
 module.exports = {
     create: (data, callBack) => {
         pool.query(
-            `insert into registration (firstName, lastName, gender, email, password, number)
-            values(?,?,?,?,?,?) `,
+            `INSERT INTO registration (firstName, lastName, gender, email, password, number)
+             VALUES (?, ?, ?, ?, ?, ?)`,
             [
-                data.firstName,  // Ensure this matches the request body field
-                data.lastName,    // Ensure this matches the request body field
+                data.firstName,
+                data.lastName,
                 data.gender,
                 data.email,
                 data.password,
                 data.number,
+                
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    createImgUser: (data, callBack) => {
+        pool.query(
+            `INSERT INTO registration (firstName, lastName, gender, email, password, number, image)
+             VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [
+                data.firstName,
+                data.lastName,
+                data.gender,
+                data.email,
+                data.password,
+                data.number,
+                data.image, // Make sure your table has an "image" column
             ],
             (error, results, fields) => {
                 if (error) {

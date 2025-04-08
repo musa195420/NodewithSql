@@ -15,6 +15,8 @@ app.use((req,res,next)=>{
  next();
 });
 
+app.use("/uploads", express.static("uploads"));
+
 app.use("/api/users",userRouter);
 app.get("/api",(req,res)=>{
     res.json(
