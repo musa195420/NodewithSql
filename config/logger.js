@@ -1,5 +1,6 @@
 const { createLogger, transports, format } = require('winston');
 require('winston-mongodb');
+require("dotenv").config();
 
 const loggerTransports = [
   new transports.File({
